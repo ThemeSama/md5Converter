@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>Son Çeviriler</ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+
+	<ion-refresher (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+
+    <ion-slides centeredSlides pager effect="slide" slidesPerView="3" spaceBetween="30">
+
+      <ion-slide *ngFor="let md5 of md5List">
+        <div class="md5-slide">
+          {{md5.key}} <br> {{md5.md5}} <span class="tarih">{{md5.accessDate | date: 'dd/MM/yyyy hh:mm'}}</span>
+        </div>
+      </ion-slide>
+
+    </ion-slides>
+  
+</ion-content>

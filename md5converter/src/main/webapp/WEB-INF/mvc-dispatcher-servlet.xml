@@ -1,0 +1,55 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/jdbc
+        http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
+
+    <!-- Main Package -->
+    <context:component-scan base-package="com.themesama.api" />
+
+    <!-- Enables the Spring MVC -->
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter"/>
+            <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"/>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+
+    <!-- Database Configs -->
+    <beans:bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+        <beans:property name="driverClassName" value="com.mysql.cj.jdbc.Driver"/>
+        <beans:property name="url" value="jdbc:mysql://localhost:3306/md5converter"/>
+        <beans:property name="username" value="root"/>
+        <beans:property name="password" value="root"/>
+    </beans:bean>
+
+    <beans:bean id="hibernate5AnnotatedSessionFactory"
+                class="org.springframework.orm.hibernate5.LocalSessionFactoryBean">
+        <beans:property name="dataSource" ref="dataSource"/>
+        <beans:property name="packagesToScan" value="com.themesama.api.models"/>
+        <beans:property name="hibernateProperties">
+            <beans:props>
+                <beans:prop key="hibernate.dialect">com.themesama.api.helper.MD5MySQL5Dialect</beans:prop>
+                <beans:prop key="hibernate.show_sql">true</beans:prop>
+                <beans:prop key="hibernate.hbm2ddl.auto">update</beans:prop>
+            </beans:props>
+        </beans:property>
+    </beans:bean>
+
+    <tx:annotation-driven transaction-manager="transactionManagerMD5"/>
+    <beans:bean id="transactionManagerMD5" class="org.springframework.orm.hibernate5.HibernateTransactionManager">
+        <beans:property name="sessionFactory" ref="hibernate5AnnotatedSessionFactory"/>
+    </beans:bean>
+
+</beans>
