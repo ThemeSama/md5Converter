@@ -14,7 +14,7 @@
 
       <ion-slide *ngFor="let md5 of md5List">
         <div class="md5-slide">
-          {{md5.key}} <br> {{md5.md5}} <span class="tarih">{{md5.accessDate | date: 'dd/MM/yyyy hh:mm'}}</span>
+          <h3>{{md5.key}}</h3> <p>{{md5.md5}}</p> <span class="tarih">{{md5.accessDate | date: 'dd/MM/yyyy hh:mm'}}</span>
         </div>
       </ion-slide>
 
